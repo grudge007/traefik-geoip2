@@ -1,0 +1,7 @@
+displayName: GeoBlock
+type: middleware
+import: github.com/grudge007/traefik-geoblock
+summary: Blocks or allows requests based on GeoIP with subnet exclusions
+testData:
+  mmdbPath: /data/GeoLite2-Country.mmdb
+  excludeFilePath: /data/excluded_subnets.txt

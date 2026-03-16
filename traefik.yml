@@ -1,0 +1,5 @@
+experimental:
+  localPlugins:
+    geoblock:
+      moduleName: github.com/grudge007/traefik-geoblock
+      version: v0.1.0

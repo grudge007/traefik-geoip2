@@ -1,7 +1,7 @@
-displayName: GeoBlock
+displayName: Geolocate IP
 type: middleware
 import: github.com/grudge007/traefik-geoblock
-summary: Blocks or allows requests based on GeoIP with subnet exclusions
+summary: A high-performance MaxMind GeoIP plugin for Traefik that injects the resolved country code into the request header.
 testData:
-  mmdbPath: /data/GeoLite2-Country.mmdb
-  excludeFilePath: /data/excluded_subnets.txt
+  DbPath: "/path/to/GeoLite2-Country.mmdb"
+  HeaderName: "X-Geo-Country"

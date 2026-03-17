@@ -1,4 +1,4 @@
-package traefik_geoblock_test
+package traefik_geoip2_test
 
 import (
 	"context"
@@ -6,17 +6,17 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/grudge007/traefik-geoblock"
+	"github.com/grudge007/traefik-geoip2"
 )
 
-func TestGeoblock_ServeHTTP(t *testing.T) {
-	config := traefik_geoblock.CreateConfig()
+func TestGeoIP2_ServeHTTP(t *testing.T) {
+	config := traefik_geoip2.CreateConfig()
 	config.DbPath = "invalid.mmdb" // Will test initialization error path
 	
 	ctx := context.Background()
 	next := http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {})
 
-	_, err := traefik_geoblock.New(ctx, next, config, "test-geoblock")
+	_, err := traefik_geoip2.New(ctx, next, config, "test-geoip2")
 	if err == nil {
 		t.Errorf("Expected an error when loading invalid mmdb path")
 	}
@@ -26,8 +26,8 @@ func TestGeoblock_ServeHTTP(t *testing.T) {
 // This tests how fast the plugin processes a request when the MMDB lookup is bypassed
 // to ensure no other logic causes overhead.
 func BenchmarkServeHTTP(b *testing.B) {
-	// Creating standard geoblock manually for benchmark (simulating if open succeeded)
-	config := traefik_geoblock.CreateConfig()
+	// Creating standard geoip2 manually for benchmark (simulating if open succeeded)
+	config := traefik_geoip2.CreateConfig()
 	config.DbPath = "dummy.mmdb"
 
 	// Mock handler that passes through

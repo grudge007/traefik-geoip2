@@ -1,6 +1,6 @@
-// Package traefik_geoblock provides a Traefik middleware that geolocates an IP
+// Package traefik_geoip2 provides a Traefik middleware that geolocates an IP
 // and injects the resulting country code into the HTTP request headers.
-package traefik_geoblock
+package traefik_geoip2
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 	"github.com/IncSW/geoip2"
 )
 
-// Config holds the configuration for the Geoblock middleware.
+// Config holds the configuration for the GeoIP2 middleware.
 type Config struct {
 	DbPath     string `json:"dbPath,omitempty"`
 	HeaderName string `json:"headerName,omitempty"`
@@ -26,15 +26,15 @@ func CreateConfig() *Config {
 	}
 }
 
-// Geoblock is the Traefik middleware.
-type Geoblock struct {
+// GeoIP2 is the Traefik middleware.
+type GeoIP2 struct {
 	next       http.Handler
 	name       string
 	dbReader   *geoip2.CountryReader
 	headerName string
 }
 
-// New creates a new Geoblock middleware.
+// New creates a new GeoIP2 middleware.
 func New(ctx context.Context, next http.Handler, config *Config, name string) (http.Handler, error) {
 	if config.DbPath == "" {
 		return nil, fmt.Errorf("dbPath cannot be empty")
@@ -50,7 +50,7 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 		return nil, fmt.Errorf("failed to open mmdb, path: %s, error: %w", config.DbPath, err)
 	}
 
-	return &Geoblock{
+	return &GeoIP2{
 		next:       next,
 		name:       name,
 		dbReader:   reader,
@@ -58,7 +58,7 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 	}, nil
 }
 
-func (g *Geoblock) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+func (g *GeoIP2) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	// Quick path out if reader is missing
 	if g.dbReader == nil {
 		g.next.ServeHTTP(rw, req)

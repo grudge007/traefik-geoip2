@@ -1,4 +1,4 @@
-module github.com/grudge007/traefik-geoblock
+module github.com/grudge007/traefik-geoip2
 
 go 1.24.2
 

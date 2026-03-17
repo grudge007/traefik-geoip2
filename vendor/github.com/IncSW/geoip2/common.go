@@ -5,7 +5,7 @@ import (
 	"errors"
 	"math"
 	"strconv"
-	"unsafe"
+	
 )
 
 func readControl(buffer []byte, offset uint) (byte, uint, uint, error) {
@@ -366,5 +366,5 @@ func bytesToFloat64(buffer []byte) float64 {
 }
 
 func b2s(value []byte) string {
-	return *(*string)(unsafe.Pointer(&value))
+	return string(value)
 }

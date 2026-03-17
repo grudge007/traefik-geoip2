@@ -1,0 +1,9 @@
+project_name: MyProject
+project_root: /home/iamgrudge/Configs/Innspark/geoLocateIp
+default_user: root
+default_path: /opt/MyProject
+private_key_path: /home/iamgrudge/.ssh/id_rsa
+nodes:
+- ip: 192.168.192.145
+  user: root
+  path: /etc/traefik/plugins-local/src/github.com/grudge007/traefik-geoblock/

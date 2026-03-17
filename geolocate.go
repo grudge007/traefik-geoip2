@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/oschwald/maxminddb-golang"
+	"github.com/IncSW/geoip2"
 )
 
 // Config holds the configuration for the Geoblock middleware.
@@ -30,7 +30,7 @@ func CreateConfig() *Config {
 type Geoblock struct {
 	next       http.Handler
 	name       string
-	dbReader   *maxminddb.Reader
+	dbReader   *geoip2.CountryReader
 	headerName string
 }
 
@@ -45,7 +45,7 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 		headerName = "X-Geo-Country"
 	}
 
-	reader, err := maxminddb.Open(config.DbPath)
+	reader, err := geoip2.NewCountryReaderFromFile(config.DbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open mmdb, path: %s, error: %w", config.DbPath, err)
 	}
@@ -69,15 +69,9 @@ func (g *Geoblock) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	ip := net.ParseIP(clientIP)
 
 	if ip != nil {
-		var record struct {
-			Country struct {
-				IsoCode string `maxminddb:"iso_code"`
-			} `maxminddb:"country"`
-		}
-
-		err := g.dbReader.Lookup(ip, &record)
-		if err == nil && record.Country.IsoCode != "" {
-			req.Header.Set(g.headerName, record.Country.IsoCode)
+		record, err := g.dbReader.Lookup(ip)
+		if err == nil && record != nil && record.Country.ISOCode != "" {
+			req.Header.Set(g.headerName, record.Country.ISOCode)
 		}
 	}
 

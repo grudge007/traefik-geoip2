@@ -9,9 +9,6 @@ import (
 	"github.com/grudge007/traefik-geoblock"
 )
 
-// NOTE: Since MaxMind Go library does not allow mock creation easily we test unit parsing here
-// with an invalid file just to ensure panics don't occur.
-
 func TestGeoblock_ServeHTTP(t *testing.T) {
 	config := traefik_geoblock.CreateConfig()
 	config.DbPath = "invalid.mmdb" // Will test initialization error path
@@ -33,13 +30,9 @@ func BenchmarkServeHTTP(b *testing.B) {
 	config := traefik_geoblock.CreateConfig()
 	config.DbPath = "dummy.mmdb"
 
-	// Mocking empty struct for speed test since we can't open a real mmdb file easily here
+	// Mock handler that passes through
 	next := http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {})
-	handler := struct {
-		next http.Handler
-	}{
-		next: next,
-	}
+	var handler http.Handler = next
 
 	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, "http://localhost", nil)
 	if err != nil {
@@ -51,6 +44,7 @@ func BenchmarkServeHTTP(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		handler.next.ServeHTTP(rw, req)
+		handler.ServeHTTP(rw, req)
 	}
 }
+

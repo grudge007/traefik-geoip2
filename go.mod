@@ -2,6 +2,4 @@ module github.com/grudge007/traefik-geoblock
 
 go 1.24.2
 
-require github.com/oschwald/maxminddb-golang v1.13.1
-
-require golang.org/x/sys v0.21.0 // indirect
+require github.com/IncSW/geoip2 v0.1.1

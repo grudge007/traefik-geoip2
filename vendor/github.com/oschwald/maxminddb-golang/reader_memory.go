@@ -1,6 +1,3 @@
-//go:build appengine || plan9 || js || wasip1 || wasi
-// +build appengine plan9 js wasip1 wasi
-
 package maxminddb
 
 import "io/ioutil"

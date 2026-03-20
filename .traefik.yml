@@ -3,5 +3,5 @@ type: middleware
 import: github.com/grudge007/traefik-geoip2
 summary: A high-performance MaxMind GeoIP plugin for Traefik that injects the resolved country code into the request header.
 testData:
-  DbPath: "/path/to/GeoLite2-Country.mmdb"
+  DbPath: "./geolocateDB/GeoLite2-Country.mmdb"
   HeaderName: "X-Geo-Country"

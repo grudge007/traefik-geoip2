@@ -23,7 +23,7 @@ experimental:
   plugins:
     traefik-geoip2:
       moduleName: "github.com/grudge007/traefik-geoip2"
-      version: "v0.1.4" # Use the latest release tag
+      version: "v0.1.5" # Use the latest release tag
 ```
 
 ### 3. Dynamic Configuration (Using the Middleware)
